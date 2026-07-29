@@ -1,0 +1,4 @@
+import {cp,rm,mkdir,readFile,writeFile} from 'node:fs/promises';import path from 'node:path';
+const root=process.cwd(),src=path.join(root,'site'),dist=path.join(root,'dist');await rm(dist,{recursive:true,force:true});await mkdir(dist,{recursive:true});await cp(src,dist,{recursive:true});
+const endpoint=process.env.FORMSPREE_ENDPOINT||process.env.VITE_FORMSPREE_ENDPOINT;if(endpoint){if(!/^https:\/\/formspree\.io\/f\/[A-Za-z0-9_-]+$/.test(endpoint))throw new Error('FORMSPREE_ENDPOINT must be a valid https://formspree.io/f/... URL');const file=path.join(dist,'assets/js/config.js');const value=await readFile(file,'utf8');await writeFile(file,value.replace('https://formspree.io/f/REPLACE_WITH_FORM_ID',endpoint));}
+console.log(`Built ${dist}`);
